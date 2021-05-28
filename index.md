@@ -11,7 +11,7 @@ title: [习题解答]计算机教育中缺失的一课
 {% for solution in solutions %}
     {% if solution.phony != true %}
         <li class='solution-title'>
-            <span>{{solution.index}}: </span><a href="{{ solution.url }}">{{ solution.title }}</a>
+            <span>{{solution.index}}: </span><a href="{{site.url}}/{{ solution.url }}">{{ solution.title }}</a>
         </li>
     {% endif %}
 {% endfor %}
