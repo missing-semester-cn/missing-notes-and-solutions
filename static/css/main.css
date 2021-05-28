@@ -407,5 +407,5 @@ input[type=checkbox]:checked ~ .menu-label:after {
 
 .solution-title{
   font-size: 20px;
-  margin: 10px;
+  margin: 8px;
 }
