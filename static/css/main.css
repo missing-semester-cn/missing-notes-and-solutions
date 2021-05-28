@@ -390,7 +390,7 @@ input[type=checkbox]:checked ~ .menu-label:after {
   -webkit-box-shadow: 0 0 10px #888;
      -moz-box-shadow: 0 0 10px #888;
           /* box-shadow: 0 0 10px #888; */
-          box-shadow: 0px -1px 20px 0px #562c8c6b;
+          box-shadow: 0px -1px 20px 0px #dfdce26b;
 }
 .ribbon a {
   border: 1px solid #000;
