@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: solution
 title: Solution-元编程
 solution: true
 index: 8

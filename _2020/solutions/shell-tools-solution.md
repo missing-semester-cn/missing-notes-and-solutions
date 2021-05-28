@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: solution
 title: Solution-Shell 工具和脚本
 solution: true
 index: 2

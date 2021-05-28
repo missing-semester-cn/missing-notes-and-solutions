@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: solution
 title: Solution-课程概览与 shell
 solution: true
 index: 1

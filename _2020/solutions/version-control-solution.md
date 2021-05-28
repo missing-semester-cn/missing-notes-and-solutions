@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: solution
 title: Solution-版本控制
 solution: true
 index: 6

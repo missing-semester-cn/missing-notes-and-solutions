@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: solution
 title: Solution-编辑器 (Vim)
 solution: true
 index: 3

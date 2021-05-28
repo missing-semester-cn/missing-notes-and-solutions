@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: solution
 title: Solution-数据清洗
 solution: true
 index: 4

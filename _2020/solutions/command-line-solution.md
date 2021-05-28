@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: solution
 title: Solution-命令行环境
 solution: true
 index: 5
