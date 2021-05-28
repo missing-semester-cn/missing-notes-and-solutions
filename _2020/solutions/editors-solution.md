@@ -2,6 +2,7 @@
 layout: page
 title: Solution-编辑器 (Vim)
 solution: true
+index: 3
 ---
 
 1. 完成 vimtutor。 备注： 它在一个 80x24（80 列，24 行） 终端窗口看起来最好。

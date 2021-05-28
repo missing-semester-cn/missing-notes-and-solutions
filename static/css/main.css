@@ -404,3 +404,8 @@ input[type=checkbox]:checked ~ .menu-label:after {
   /* shadow */
   /* text-shadow: 0 0 5px #444; */
 }
+
+.solution-title{
+  font-size: 20px;
+  margin: 10px;
+}

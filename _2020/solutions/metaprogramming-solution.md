@@ -2,6 +2,7 @@
 layout: page
 title: Solution-元编程
 solution: true
+index: 8
 ---
 
 ### 1. 大多数的 makefiles 都提供了 一个名为 clean 的构建目标，这并不是说我们会生成一个名为clean的文件，而是我们可以使用它清理文件，让 make 重新构建。您可以理解为它的作用是“撤销”所有构建步骤。在上面的 makefile 中为paper.pdf实现一个clean 目标。您需要构建phony。您也许会发现 git ls-files 子命令很有用。其他一些有用的 make 构建目标可以在这里找到；

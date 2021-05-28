@@ -2,6 +2,7 @@
 layout: page
 title: Solution-课程概览与 shell
 solution: true
+index: 1
 ---
 
 1. 在 /tmp 下新建一个名为 missing 的文件夹。

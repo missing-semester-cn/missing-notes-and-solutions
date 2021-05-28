@@ -2,6 +2,7 @@
 layout: page
 title: Solution-数据清洗
 solution: true
+index: 4
 ---
 1. 学习一下这篇简短的 [交互式正则表达式教程](https://regexone.com/).
 2. 统计words文件 (`/usr/share/dict/words`) 中包含至少三个`a` 且不以`'s` 结尾的单词个数。

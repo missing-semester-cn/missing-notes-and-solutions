@@ -2,6 +2,7 @@
 layout: page
 title: Solution-Shell 工具和脚本
 solution: true
+index: 2
 ---
 
 1. 阅读 man ls ，然后使用ls 命令进行如下操作：
