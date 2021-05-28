@@ -1,10 +1,8 @@
 ---
 layout: page
-title: 计算机教育中缺失的一课
+title: 【习题解答】计算机教育中缺失的一课
 ---
 
-
-# 学习笔记及习题解答
 
 以下是 [计算机教育中缺失的一课](https://missing-semester-cn.github.io/) 配套习题解答及学习笔记：
 
