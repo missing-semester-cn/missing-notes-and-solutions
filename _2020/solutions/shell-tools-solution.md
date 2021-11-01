@@ -158,3 +158,7 @@ index: 2
 5. (进阶) 编写一个命令或脚本递归的查找文件夹中最近使用的文件。更通用的做法，你可以按照最近的使用时间列出文件吗？
 `find . -type f -print0 | xargs -0 ls -lt | head -1`
 ![1.png]({{site.url}}/2020/solutions/images/2/4.png)
+
+当文件数量较多时，上面的解答会得出错误结果，解决办法是增加 `-mmin `条件，先将最近修改的文件进行初步筛选再交给ls进行排序显示
+ `find . -type f -mmin -60 -print0 | xargs -0 ls -lt | head -10`
+![1.png]({{site.url}}/2020/solutions/images/2/5.png)
