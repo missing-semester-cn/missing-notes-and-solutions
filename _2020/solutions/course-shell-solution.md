@@ -28,8 +28,14 @@ index: 1
 8. 使用 `|` 和 `>` ，将 semester 文件输出的最后更改日期信息，写入主目录下的 `last-modified.txt` 的文件中
     ![7.png]({{site.url}}/2020/solutions/images/1/7.png)
 9. 写一段命令来从 /sys 中获取笔记本的电量信息，或者台式机 CPU 的温度。注意：macOS 并没有 sysfs，所以 Mac 用户可以跳过这一题。
-Windows用户可以按以下命令查询：/sys/class$ cd ./power_supply/BAT1
-利用ls -l指令观察信息，可用xdg-open指令查询满电电量energy_full与当前电量energy_now。
+    Windows用户可以按以下命令查询：/sys/class$ cd ./power_supply/BAT1
+    利用ls -l指令观察信息，可用xdg-open指令查询满电电量energy_full与当前电量energy_now。
+
+    Linux用户可以通过以下命令查询：
+    ```shell
+    > cat /sys/class/power_supply/BAT1/capacity
+    100
+    ```
 
 
 
