@@ -10,7 +10,7 @@ index: 9
 假设一个密码是从四个小写的单词拼接组成，每个单词都是从一个含有10万单词的字典中随机选择，且每个单词选中的概率相同。 一个符合这样构造的例子是 `correcthorsebatterystaple` 。这个密码有多少比特的熵？
 假设另一个密码是用八个随机的大小写字母或数字组成。一个符合这样构造的例子是 `rg8Ql34g` 。这个密码又有多少比特的熵？
 ```
-Entropy = log_2(100000^5) = 83 #correcthorsebatterystaple
+Entropy = log_2(100000^4) = 66 #correcthorsebatterystaple
 Entropy = log_2((26+26+10)^8) = 48 #rg8Ql34g
 ```
 也可以使用下面两个网址进行计算
