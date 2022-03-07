@@ -57,7 +57,7 @@ index: 6
     [alias]
         graph = log --all --graph --decorate --oneline
     ```
-2. 您可以通过执行 git config --global core.excludesfile ~/.gitignore_global 在 ~/.gitignore_global 中创建全局忽略规则。配置您的全局 gitignore 文件来字典忽略系统或编辑器的临时文件，例如 .DS_Store；
+2. 您可以通过执行 git config --global core.excludesfile ~/.gitignore_global 在 ~/.gitignore_global 中创建全局忽略规则。配置您的全局 gitignore 文件来自动忽略系统或编辑器的临时文件，例如 .DS_Store；
     ```bash
     git config --global core.excludesfile ~/.gitignore .DS_Store
     ```
