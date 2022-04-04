@@ -39,7 +39,8 @@ index: 5
 2. 如果您希望某个进程结束后再开始另外一个进程， 应该如何实现呢？
    在这个练习中，我们使用 sleep 60 & 作为先执行的程序。一种方法是使用 wait 命令。尝试启动这个休眠命令，然后待其结束后再执行 ls 命令。 
    ```bash
-   sleep 60 | wait && ls
+   sleep 60 &
+   pgrep sleep | wait; ls
    ```
    但是，如果我们在不同的 bash 会话中进行操作，则上述方法就不起作用了。因为 [wait](https://www.man7.org/linux/man-pages/man1/wait.1p.html) 只能对子进程起作用。之前我们没有提过的一个特性是，kill 命令成功退出时其状态码为 0 ，其他状态则是非0。kill -0 则不会发送信号，但是会在进程不存在时返回一个不为0的状态码。请编写一个 bash 函数 pidwait ，它接受一个 pid 作为输入参数，然后一直等待直到该进程结束。您需要使用 sleep 来避免浪费 CPU 性能。
    ```bash
