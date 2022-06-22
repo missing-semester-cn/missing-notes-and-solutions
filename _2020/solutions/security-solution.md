@@ -21,7 +21,7 @@ Entropy = log_2((26+26+10)^8) = 48 #rg8Ql34g
 假设一个攻击者每秒可以尝试1万个密码，这个攻击者需要多久可以分别破解上述两个密码？
 ```
 第一个更强。
-分别需要 31.7 万亿年和 692 年。
+分别需要 3.17 亿年和 692 年。
 ```
 ### 2.密码散列函数 
 从[Debian镜像站](https://www.debian.org/CD/http-ftp/)下载一个光盘映像（比如这个来自阿根廷镜像站的[映像](http://debian.xfree.com.ar/debian-cd/10.2.0/amd64/iso-cd/debian-10.2.0-amd64-netinst.iso)）。使用`sha256sum`命令对比下载映像的哈希值和官方Debian站公布的哈希值。如果你下载了上面的映像，官方公布的哈希值可以[参考这个文件](https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/SHA256SUMS)。
