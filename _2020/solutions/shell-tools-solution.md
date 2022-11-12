@@ -61,10 +61,10 @@ index: 2
 
     while true
     do
-        ./buggy.sh 2> out.log
+        ./buggy.sh &>> out.log
         if [[ $? -ne 0 ]]; then
-            echo "failed after $count times"
             cat out.log
+            echo "failed after $count times"
             break
         fi
         ((count++))
@@ -76,10 +76,10 @@ index: 2
     ```bash
     for ((count=1;;count++))
     do
-        ./buggy.sh 2> out.log
+        ./buggy.sh &>> out.log
         if [[ $? -ne 0 ]]; then
-            echo "failed after $count times"
             cat out.log
+            echo "failed after $count times"
             break
 
         echo "$count try"
@@ -94,11 +94,11 @@ index: 2
     until [[ "$?" -ne 0 ]];
     do
         count=$((count+1))
-        ./random.sh 2> out.txt
+        ./random.sh &>> out.txt
     done
 
-    echo "found error after $count runs"
     cat out.txt
+    echo "found error after $count runs"
 
     ```
     ![1.png]({{site.url}}/2020/solutions/images/2/2.png)
