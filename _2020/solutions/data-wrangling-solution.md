@@ -54,7 +54,7 @@ index: 4
    `sed s/REGEX/SUBSTITUTION/ input.txt > input.txt`。但是这并不是一个明智的做法，为什么呢？还是说只有 `sed`是这样的? 查看 `man sed` 来完成这个问题。  
    `sed s/REGEX/SUBSTITUTION/ input.txt > input.txt` 表达式中后一个 `input.txt`会首先被清空，而且是发生在前的。所以前面一个`input.txt`在还没有被 `sed` 处理时已经为空了。在使用正则处理文件前最好是首先备份文件。
    ```bash
-   sed -i.bak s/REGEX/SUBSTITUTION/ input.txt > input.txt
+   sed -i.bak s/REGEX/SUBSTITUTION/ input.txt
    ```
    可以自动创建一个后缀为 `.bak` 的备份文件。
 4. 找出您最近十次开机的开机时间平均数、中位数和最长时间。在Linux上需要用到 `journalctl` ，而在 macOS 上使用 `log show`。找到每次起到开始和结束时的时间戳。在Linux上类似这样操作：
