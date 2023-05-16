@@ -36,6 +36,7 @@ index: 5
    ```bash
    pkill  -af sleep
    ```
+
 2. 如果您希望某个进程结束后再开始另外一个进程， 应该如何实现呢？
    在这个练习中，我们使用 sleep 60 & 作为先执行的程序。一种方法是使用 wait 命令。尝试启动这个休眠命令，然后待其结束后再执行 ls 命令。 
    ```bash
@@ -95,18 +96,32 @@ index: 5
 在新的虚拟机上测试该安装脚本。
 将您现有的所有配置文件移动到项目仓库里。
 将项目发布到GitHub。
-```bash
-mkdir ~/dotfiles
-git init ~/dotfiles
-```
-```bash
-#!/bin/bash
-files="bashrc vimrc "
 
-for file in $files; do
-   ln -s ~/dotfiles/$file ~/.$file
-done
-```
+    ```bash
+    ~ $ mkdir ~/gits/dotfiles   # gits目录是创建用来存放所有git及github仓库的目录
+    ~ $ git init ~/gits/dotfiles
+    # 将本机的配置文件，如 .vimrc/.bashrc/.tmux.conf 等复制进该目录
+    ~ $ ls -a ~/gits/dotfiles
+    .  ..  .bashrc  .git  .profile  .tmux.conf  .vimrc  .zshrc                      
+    # 其中，". .."分别表示本目录及上级目录，".git"为git仓库的配置文件，其他文件为存放在仓库中的系统配置文件
+    ```
+    *   学习下一讲的git操作后，可以创建Github帐号，将这个仓库push到Github上
+*   在另一台机器，或虚拟机上，将上面的Github仓库复制下来
+    ```bash
+    ~ $ git clone {{github/url/for/dotfiles}} {{local_dir}}
+
+    ~ $ vim autoconfig.sh   # 创建脚本
+    ~ $ cat autoconfig.sh
+    #!/bin/bash
+    files=$(ls -a $1 | grep -E '.[^.]+' |grep -v .git)
+    # 去掉 ls -a 返回结果中的 ". .. .git"
+    for file in `echo $files`; do
+        ln -s $1/$file ~/$file # 创建软链接
+    done
+
+    ~ $ source autoconfig.sh {{local_dir}}
+    # 执行脚本，为dotfiles中的配置文件创建在主目录 ~ 下的软链接
+    ```
 ## 远端设备
 进行下面的练习需要您先安装一个 Linux 虚拟机（如果已经安装过则可以直接使用），如果您对虚拟机尚不熟悉，可以参考这篇教程 来进行安装。
 
@@ -168,10 +183,81 @@ done
       sudo launchctl stop com.openssh.sshd
       sudo launchctl start com.openssh.sshd
    ```
+   下面提供的是虚拟机上的操作示例。
+*   在虚拟机上创建**root登录帐号** ([login as root](https://help.ubuntu.com/community/RootSudo#root_account))
+    *   注意：root登录 和 root用户 是不一样的
+    ```shell
+    ~ $ VBoxManage startvm "ubuntu_server" --type headless
+    ~ $ ssh my_server
+    # 使用ssh连接成功，跳转到虚拟机的终端
+    my_server@myserver:~$ sudo su
+    root@myserver:~# passwd root    # 输入密码，创建root登录帐号
+    root@myserver:~# vim ~/etc/ssh/sshd_config
+    # 查找到行"#PermitRootLogin prohibit-password"，使用 o 在下方新增一行
+    # 输入"PermitRootLogin yes"
+
+    root@myserver:~# service sshd restart   
+    # 重启sshd服务，使刚才的修改生效
+    root@myserver:~# exit
+    my_server@myserver:~$ exit
+    # 断开与虚拟机的ssh连接
+    ```
+    *   备注：sshd服务可能需要重启虚拟机，才能生效（可以直接在终端重启虚拟机，如下）
+    ```shell
+    ~ $ VBoxManage controlvm "ubuntu_server" poweroff
+    ~ $ VBoxManage startvm "ubuntu_server" --type headless
+    ```
+*   使用 root登陆 连接虚拟机
+    ```shell
+    ~ $ ssh root@192.168.1.9
+    # 输入刚才设置的密码
+    root@myserver:~# 
+    ```
+*   重新配置sshd，禁用 root登录
+    ```shell
+    root@myserver:~# vim /etc/ssh/sshd_config
+    # 查找到行"#PasswordAuthentication yes"，使用`o`在其下方新增一行
+    # 输入"PasswordAuthentication no"
+    # 查找到行"PermitRootLogin yes"，将 yes 修改为 no
+
+    root@myserver:~# service sshd restart    
+    root@myserver:~# exit
+    my_server@myserver:~$ exit
+
+    ~ $
+    ```
+*   再次尝试 root登录
+    ```shell
+    ~ $ ssh root@192.168.1.9
+    # 要求输入密码，可是输入密码后，仍会显示
+    Permission denied, please try again.
+    # 显示 3 次或更多次要求输入密码后，输出
+    Permission denied (publickey,password)
+    ~ $ 
+    ~ $ ssh my_server
+    my_server@myserver:~$   
+    ```
+    *   以上对于`PermitRootLogin`及`PasswordAuthentication`的修改，只影响 root登录方式，前面使用的`ssh my_server`登录方式不受影响
+*   总体而言，允许root登录，是有安全风险的，一般不建议使用。对于已创建的root登录方式，可删除：
+    ```shell
+    my_server@myserver:~$ sudo passwd -dl root
+    ```
 2. (附加题) 在虚拟机中安装 mosh 并启动连接。然后断开服务器/虚拟机的网络适配器。mosh可以恢复连接吗？
-   ```
-   sudo apt-get install mosh
-   ```
+
+*   在虚拟机上安装mosh
+    ```shell
+    my_server@myserver:~$ sudo apt-get install mosh
+    my_server@myserver:~$ mosh-server
+    ```
+*   在终端使用mosh连接虚拟机
+    ```shell
+    ~ $ sudo apt install mosh
+    ~ $ mosh my_server@196.168.1.9
+    ```
+*   在VirtualBox管理器的最上方，“控制(M)”中选择“设置”，在“网络”选项中，将“连接方式”（默认是“桥接网卡”）改为“未指定”，即可断开网络适配器
+*   断开网络适配器后，无论使用ssh，还是mosh连接，都不能主动恢复连接（需要重新修改虚拟机的网络连接方式）
+    *   mosh在断开连接后，会有提示，告知：连接断开，在尝试重连
+    *   重新连上网络适配器后，ssh或mosh连接都能恢复（而且断开后连接虚拟机输入的内容能继续显示），只是mosh的延迟稍微小一些
 3. (附加题) 查看ssh的-N 和 -f 选项的作用，找出在后台进行端口转发的命令是什么？
    ```bash
       -N      Do not execute a remote command.  This is useful for just forwarding ports.

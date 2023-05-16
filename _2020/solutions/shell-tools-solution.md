@@ -57,7 +57,9 @@ index: 2
 
     使用 while 循环完成
     ```bash
-    count=1
+    #!/usr/bin/env bash
+    count=0
+    echo > out.log
 
     while true
     do
@@ -74,15 +76,15 @@ index: 2
     ```
     使用 for 循环完成
     ```bash
-    for ((count=1;;count++))
+    #!/usr/bin/env bash
+    echo > out.log
+    for ((count=0;;count++))
     do
         ./buggy.sh &>> out.log
         if [[ $? -ne 0 ]]; then
-            cat out.log
             echo "failed after $count times"
             break
 
-        echo "$count try"
         fi
     done
 
@@ -91,15 +93,22 @@ index: 2
     ```bash
     #!/usr/bin/env bash
     count=0
+    ./buggy.sh &>> out.log
     until [[ "$?" -ne 0 ]];
     do
         count=$((count+1))
-        ./random.sh &>> out.txt
+        ./buggy.sh &>> out.log
     done
 
-    cat out.txt
-    echo "found error after $count runs"
+    echo "failed after $count runs"
 
+    ```
+    执行测试脚本debug.sh,并验证脚本结果的正确性
+    ```bash
+    ~$ ./debug.sh
+    failed after 34 times
+    ~$ cat out.log | grep Everything | wc -l
+    34
     ```
     ![1.png]({{site.url}}/2020/solutions/images/2/2.png)
 
