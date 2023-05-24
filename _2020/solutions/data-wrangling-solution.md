@@ -32,17 +32,17 @@ index: 4
    ```
    还有一个很 有挑战性的问题：哪个组合从未出现过？
    为了得到没出现的组合，首先我们要生成一个包含全部组合的列表，然后再使用上面得到的出现的组合，比较二者不同即可。
-   ```
+   ```bash
    #!/bin/bash
-  for i in {a..z};do
+   for i in {a..z};do
       for j in {a..z};do
          echo  "$i$j"
       done
    done
-  ```
-  ```bash
-  ./all.sh > all.txt
-  ```
+   ```
+   ```bash
+   ./all.sh > all.txt
+   ```
    ```bash
    cat /usr/share/dict/words | tr "[:upper:]" "[:lower:]" | grep -E "^([^a]*a){3}.*$" | grep -v "'s$" | sed -E "s/.*([a-z]{2})$/\1/" | sort | uniq > occurance.txt
    ```
@@ -84,7 +84,7 @@ index: 4
    pi@raspberrypi:~$ journalctl --list-boots
    -1 d176984f171a4ceba353de47abd2b891 Thu 2021-05-27 15:55:36 BST—Fri 2021-05-28 02:09:50 BST
    0 18c4819a536548a29def9f2b56f63dd0 Fri 2021-05-28 02:09:51 BST—Fri 2021-05-28 02:25:50 BST
-  ```
+   ```
    可以看到已经可以列出多次启动信息了，然后我们进行十次重启。
    ![1.png]({{site.url}}/2020/solutions/images/4/2.png)
    可以使用 `systemd-analyze`工具看一下启动时间都花在哪里：
@@ -137,41 +137,42 @@ index: 4
    ```
 6. 在网上找一个类似 [这个](https://stats.wikimedia.org/EN/TablesWikipediaZZ.htm) 或者[这个](https://ucr.fbi.gov/crime-in-the-u.s/2016/crime-in-the-u.s.-2016/topic-pages/tables/table-1)的数据集。或者从[这里](https://www.springboard.com/blog/free-public-data-sets-data-science-project/)找一些。使用 `curl` 获取数据集并提取其中两列数据，如果您想要获取的是HTML数据，那么[`pup`](https://github.com/EricChiang/pup)可能会更有帮助。对于JSON类型的数据，可以试试[`jq`](https://stedolan.github.io/jq/)。请使用一条指令来找出其中一列的最大值和最小值，用另外一条指令计算两列之间差的总和。
 
-    ```shell
-    ~$ curl 'https://stats.wikimedia.org/EN/TablesWikipediaZZ.htm#wikipedians' \
-        |sed -n "/table1/,/<\/table>/p" \
-        |grep "<tr" | sed "1,12d"|head -n -3 \
-        |sed -E 's/(<[^>]*>)+/ /g' \
-        |sed 's/ &nbsp;/ -/g' \
-        |sed 's/&nbsp;//g' > data
-    
-    ~$ cat data # 处理后的数据为Jan2001截至Oct2018的
-    Oct2018 2642056 12641 70805 10498 48.9M - 6101 - - - - 10.3M - - - - - - 42.6M 
-    Sep2018 2629415 11171 66574 10004 48.7M - 6116 - - - - 10.1M - - - - - - 42.4M 
-    Aug2018 2618244 12058 68688 10640 48.5M - 6839 - - - - 10.2M - - - - - - 42.1M 
-    Jul2018 2606186 12026 68037 10305 48.3M - 6987 - - - - 9.5M - - - - - - 41.9M 
-    ...
-    Jan2001 7 7 9 - 31 12 1 8.6 1352 29% 10% 267 301kB 3.0k 15 - - 2 163 
-    ```
-    命令说明（建议先查看网站的源码格式，更加容易理解下面的操作）
-*   `|sed -n "/table1/,/<\/table>/p"`：观察网站的源代码，可以发现第一个表格的id为`table1`，该命令将截取匹配到的`table1`以及下一个`</table>`标签行之间的内容
-*   `|grep "<tr"`：html表格中，含有数据的行是以`<tr`开头，匹配这样的行
-*   `|sed "1,12d"`：去掉前12行（包含表格的表头）
-*   `|head -n -3`：去掉最后3行（包含非数据的内容）（注意：部分操作系统可能不支持该用法，最笨拙的替换实现方式是：`|sed "$d"|sed "$d"|sed "$d"`，即执行3次删除最后一行的操作）
-*   `|sed -E 's/(<[^>]*>)+/ /g'`：使用正则匹配，将所有相邻的多个html标签（格式行如`< tag >`）替换为空格
-*   `|sed 's/ &nbsp;/ -/g`：原表格中部分没有数据的单元格是以`&nbsp;`填充的，将其替换为` -`，避免在对数据操作时发生窜列的情况
-*   `|sed 's/&nbsp;//g`：原表格中部分单元格内的空格也是用`&nbsp;`表示的，将其全部删除（不影响数据处理）
+   ```shell
+   ~$ curl 'https://stats.wikimedia.org/EN/TablesWikipediaZZ.htm#wikipedians' \
+       |sed -n "/table1/,/<\/table>/p" \
+       |grep "<tr" | sed "1,12d"|head -n -3 \
+       |sed -E 's/(<[^>]*>)+/ /g' \
+       |sed 's/ &nbsp;/ -/g' \
+       |sed 's/&nbsp;//g' > data
+   
+   ~$ cat data # 处理后的数据为Jan2001截至Oct2018的
+   Oct2018 2642056 12641 70805 10498 48.9M - 6101 - - - - 10.3M - - - - - - 42.6M 
+   Sep2018 2629415 11171 66574 10004 48.7M - 6116 - - - - 10.1M - - - - - - 42.4M 
+   Aug2018 2618244 12058 68688 10640 48.5M - 6839 - - - - 10.2M - - - - - - 42.1M 
+   Jul2018 2606186 12026 68037 10305 48.3M - 6987 - - - - 9.5M - - - - - - 41.9M 
+   ...
+   Jan2001 7 7 9 - 31 12 1 8.6 1352 29% 10% 267 301kB 3.0k 15 - - 2 163 
+   ```
+   命令说明（建议先查看网站的源码格式，更加容易理解下面的操作）
 
-    ```shell
-    ~$ awk '{print $1,$4,$5}' data | sort --key=2n | head -n 1
-    Jan2001 9 -
-    # 从data中读取第一列（时间，用来定位后续结果）及第三、四列，并以第二行的数据以数字大小进行排序，然后显示最大值的结果；下一个命令显示最小值的结果
+*  `|sed -n "/table1/,/<\/table>/p"`：观察网站的源代码，可以发现第一个表格的id为`table1`，该命令将截取匹配到的`table1`以及下一个`</table>`标签行之间的内容
+*  `|grep "<tr"`：html表格中，含有数据的行是以`<tr`开头，匹配这样的行
+*  `|sed "1,12d"`：去掉前12行（包含表格的表头）
+*  `|head -n -3`：去掉最后3行（包含非数据的内容）（注意：部分操作系统可能不支持该用法，最笨拙的替换实现方式是：`|sed "$d"|sed "$d"|sed "$d"`，即执行3次删除最后一行的操作）
+*  `|sed -E 's/(<[^>]*>)+/ /g'`：使用正则匹配，将所有相邻的多个html标签（格式行如`< tag >`）替换为空格
+*  `|sed 's/ &nbsp;/ -/g`：原表格中部分没有数据的单元格是以`&nbsp;`填充的，将其替换为` -`，避免在对数据操作时发生窜列的情况
+*  `|sed 's/&nbsp;//g`：原表格中部分单元格内的空格也是用`&nbsp;`表示的，将其全部删除（不影响数据处理）
 
-    ~$ awk '{print $1,$4,$5}' data | sort --key=2n | tail -n 1
-    Mar2007 91388 11506
+   ```shell
+   ~$ awk '{print $1,$4,$5}' data | sort --key=2n | head -n 1
+   Jan2001 9 -
+   # 从data中读取第一列（时间，用来定位后续结果）及第三、四列，并以第二行的数据以数字大小进行排序，然后显示最大值的结果；下一个命令显示最小值的结果
 
-    ~$ awk '{print $1,$4,$5}' data | awk '{print $2-$3}' | awk '{s+=$1} END {print s}'
-    10153001
-    # 使用第二列的数据减去第三列的数据后，将结果加总
-    ```
+   ~$ awk '{print $1,$4,$5}' data | sort --key=2n | tail -n 1
+   Mar2007 91388 11506
+
+   ~$ awk '{print $1,$4,$5}' data | awk '{print $2-$3}' | awk '{s+=$1} END {print s}'
+   10153001
+   # 使用第二列的数据减去第三列的数据后，将结果加总
+   ```
 

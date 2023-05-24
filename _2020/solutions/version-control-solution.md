@@ -58,11 +58,12 @@ index: 6
     ![1.png]({{site.url}}/2020/solutions/images/6/10.png)
     ![1.png]({{site.url}}/2020/solutions/images/6/11.png)
 	
-*   接下来，将在视频展示的demo仓库上展示stash操作
+	- 接下来，将在视频展示的demo仓库上展示stash操作
+
     ```shell
     ~/gits/demo (main?) $ git graph
     * a735daf (HEAD -> main) Change the print functions
-    *   9d983c7 Merge branch 'dog'
+    - 9d983c7 Merge branch 'dog'
     |\
     | * aa83cee (dog) Add dog functionality
     * | 077e2a0 (cat) Add cat functionality
@@ -71,7 +72,8 @@ index: 6
     * ba821e1 Add another line
     * 1547103 Create demo for learning git commands
     ```
-*   创建新文件，添加到暂存区后，将其存入stash存储列表
+	- 创建新文件，添加到暂存区后，将其存入stash存储列表
+
     ```shell
     ~/gits/demo (main?) $ echo 'new file' > file.txt
     ~/gits/demo (main?) $ git add file.txt
@@ -85,7 +87,8 @@ index: 6
     ~/gits/demo (main+) $ git stash save "create file.txt"
     Saved working directory and index state On main: create file.txt
     ```
-*   查看stash存储的内容
+	- 查看stash存储的内容
+  
     ```shell
      # 列出所有的存储，按照git stash的执行顺序依次从0开始编号
      # 每份存储对应的编号，就是stash@{}中的数字
@@ -100,19 +103,20 @@ index: 6
      file.txt | 1 +
      1 file changed, 1 insertion(+)
     ```
-*   执行`git stash`后，添加到暂存区的内容不会再提示需要提交(Changes to be committed)。而且，尽管执行`git stash`使得提交记录新增了两项，但是可以发现`HEAD`引用并没有变动。
+	- 执行`git stash`后，添加到暂存区的内容不会再提示需要提交(Changes to be committed)。而且，尽管执行`git stash`使得提交记录新增了两项，但是可以发现`HEAD`引用并没有变动。
+
     ```shell
     ~/gits/demo (main) $ git status
     On branch main
     nothing to commit, working tree clean
 
     ~/gits/demo (main) $ git graph
-    *   27e9528 (refs/stash) On main: create file.txt
+    - 27e9528 (refs/stash) On main: create file.txt
     |\
     | * 108018a index on main: a735daf Change the print functions
     |/
     * a735daf (HEAD -> main) Change the print functions
-    *   9d983c7 Merge branch 'dog'
+    - 9d983c7 Merge branch 'dog'
     |\
     | * aa83cee (dog) Add dog functionality
     * | 077e2a0 (cat) Add cat functionality
@@ -121,7 +125,8 @@ index: 6
     * ba821e1 Add another line
     * 1547103 Create demo for learning git commands
     ```
-*   从main分支切换到dog分支，再将存储恢复，然后提交，这时，我们刚才新建的file.txt,变成了dog分支下的一次新提交。
+	- 从main分支切换到dog分支，再将存储恢复，然后提交，这时，我们刚才新建的file.txt,变成了dog分支下的一次新提交。
+
     ```shell
     ~/gits/demo (main) $ git checkout dog
     Switched to branch 'dog'
@@ -147,7 +152,7 @@ index: 6
     ~/gits/demo (dog) $ git graph
     * 19b71ce (HEAD -> dog) Add file.txt on branch dog
     | * a735daf (main) Change the print functions
-    | *   9d983c7 Merge branch 'dog'
+    | - 9d983c7 Merge branch 'dog'
     | |\
     | |/
     |/|
@@ -158,19 +163,19 @@ index: 6
     * ba821e1 Add another line
     * 1547103 Create demo for learning git commands
     ```
-    *   当我们将改动添加到暂存区（`git add`）后，通过执行`git stash`后，可以自由地切换到其他分支（注意：在暂存区存有改动时，切换分支(`checkout`)是不被允许的）
-    *   另外，运用`stash`和`stash pop`，可以自由选择将stash存储的暂存区改动即将提交到的分支（本例中，将原本应该在main分支下提交的记录移动到了dog分支下进行提交）
+    - 当我们将改动添加到暂存区（`git add`）后，通过执行`git stash`后，可以自由地切换到其他分支（注意：在暂存区存有改动时，切换分支(`checkout`)是不被允许的）
+    - 另外，运用`stash`和`stash pop`，可以自由选择 _stash存储的改动_ 即将提交到的分支（本例中，将原本应该在main分支下提交的记录移动到了dog分支下进行提交）
 
-1. 与其他的命令行工具一样，Git 也提供了一个名为 ~/.gitconfig 配置文件 (或 dotfile)。请在 ~/.gitconfig 中创建一个别名，使您在运行 git graph 时，您可以得到 git log --all --graph --decorate --oneline 的输出结果；
+10. 与其他的命令行工具一样，Git 也提供了一个名为 ~/.gitconfig 配置文件 (或 dotfile)。请在 ~/.gitconfig 中创建一个别名，使您在运行 git graph 时，您可以得到 git log --all --graph --decorate --oneline 的输出结果；
     ```bash
     [alias]
         graph = log --all --graph --decorate --oneline
     ```
-2. 您可以通过执行 git config --global core.excludesfile ~/.gitignore_global 在 ~/.gitignore_global 中创建全局忽略规则。配置您的全局 gitignore 文件来自动忽略系统或编辑器的临时文件，例如 .DS_Store；
+11. 您可以通过执行 git config --global core.excludesfile ~/.gitignore_global 在 ~/.gitignore_global 中创建全局忽略规则。配置您的全局 gitignore 文件来自动忽略系统或编辑器的临时文件，例如 .DS_Store；
     ```bash
     git config --global core.excludesfile ~/.gitignore .DS_Store
     ```
-1. 克隆 本课程网站的仓库，找找有没有错别字或其他可以改进的地方，在 GitHub 上发起拉取请求（Pull Request）；
+12. 克隆 本课程网站的仓库，找找有没有错别字或其他可以改进的地方，在 GitHub 上发起拉取请求（Pull Request）；
     首先 fork 本网站仓库，然后克隆 fork 后的仓库
     ```bash
     git clone https://github.com/hanxiaomax/missing-semester.git
