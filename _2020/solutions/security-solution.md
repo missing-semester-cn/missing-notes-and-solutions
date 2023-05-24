@@ -19,10 +19,12 @@ Entropy = log_2((26+26+10)^8) = 48 #rg8Ql34g
 
 哪一个密码更强？
 假设一个攻击者每秒可以尝试1万个密码，这个攻击者需要多久可以分别破解上述两个密码？
-```
+
 第一个更强。
-分别需要 31.7 万亿年和 692 年。
-```
+
+    *   因为每个密码的概率是相同，所以平均而言，需要的破解时间约为尝试所有可能密码所花时间的一半（概率论期望值的简单应用，记所有可能密码个数为x,每年尝试的密码数为y,破解所需的平均时间为：$\frac{1}{x\cdot y}(1+2+\cdots +x)=\frac{1}{x}\times \frac{(1+x)\times x/2}{y}=\frac{1}{2}\times\frac{1+x}{y}$ ）
+    *   对于第一个密码：$100,000^4/10^4/(365\times 24\times 3600)/2=1.085亿年$
+    *   对于第二个密码：$62^8/10^4/(365\times 24\times 3600)/2=346年$
 ### 2.密码散列函数 
 从[Debian镜像站](https://www.debian.org/CD/http-ftp/)下载一个光盘映像（比如这个来自阿根廷镜像站的[映像](http://debian.xfree.com.ar/debian-cd/10.2.0/amd64/iso-cd/debian-10.2.0-amd64-netinst.iso)）。使用`sha256sum`命令对比下载映像的哈希值和官方Debian站公布的哈希值。如果你下载了上面的映像，官方公布的哈希值可以[参考这个文件](https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/SHA256SUMS)。
 ```bash
@@ -76,8 +78,9 @@ cat secfile
 ```bash
 openssl aes-256-cbc -d -in secfile -out notsafefile
 
-cat notsafefile
-#hello world
+cmp afile notsafefile
+$?
+# 返回0,表示这两个文件内容相同
 ```
 
 
@@ -94,9 +97,34 @@ Linux 系统可以直接按照上面的教程操作，MacOS 上的操作过程�
     $ gpg --gen-key
     ```
 1. 给Anish发送一封加密的电子邮件（[Anish的公钥](https://keybase.io/anish)）。
-```bash
-gpg --encrypt --sign --armor -r me@anishathalye.com name_of_fil
-```
+
+    *  导入Anish发布的公钥，并完成验证
+    ```shell 
+    ~ $ curl https://keybase.io/anish/pgp_keys.asc | gpg --import   
+
+    ~ $ gpg --list-keys
+    # ~/.gnupg/pubring.kbx中除了刚才创建的自己的公钥，还存入了Anish的公钥
+
+    ~ $ gpg --edit-key "Anish Athalye"  # 进入gpg控制台
+    gpg> fpr
+    pub   rsa4096/C3F6E4F5086B3B32 2014-10-30 Anish Athalye <me@anishathalye.com>
+    主密钥指纹： 72EE 4824 FA6E FF1F E750  A015 C3F6 E4F5 086B 3B32
+    # 将这个密钥指纹与Anish发布在网站上的做匹配，一致
+    ```
+    * 接下来，使用Anish的公钥加密信息
+    ```shell
+    ~ $ touch message.txt
+    ~ $ echo 'hello' > message.txt
+    ~ $ gpg --encrypt --sign --armor -r me@anishathalye.com message.txt
+    # 在本目录下会生成一个message.txt.asc的加密文件
+    # 这个文件，只有拥有私钥的Anish能解密
+
+    # 如果你也想查看这个加密文件，需要使用：
+    ~ $ gpg --encrypt --sign --armor -r me@anishathalye.com -r usrname@example.com message.txt   
+    # 添加第二个 -r 接收人为你自己，你就能解密这个文件
+    ~ $ gpg message.txt.asc  
+    ```        
+    * 接下来，你就可以尝试用邮件或其他方式，将这个使用Anish的公钥加密的文件发送给他（这里只是做说明，不推荐发送无意义的信息！）
 2. 使用`git commit -S`命令签名一个Git提交，并使用`git show --show-signature`命令验证这个提交的签名。或者，使用git tag -s命令签名一个Git标签，并使用`git tag -v`命令验证标签的签名。
     ```bash
     git commit -S -m "sign a commit"
@@ -146,3 +174,20 @@ gpg --encrypt --sign --armor -r me@anishathalye.com name_of_fil
     create mode 100644 security/secfile
   ```
   ![1.png]({{site.url}}/2020/solutions/images/9/1.png)
+
+    * 创建一个带签名的标签，并验证
+    ```shell
+    ~/signgit (main) $ git tag -s "v0.0.0" -m "Create a tag"
+
+    ~/signgit (main) $ git tag -v v0.0.0
+    object 03fa307f9ced5d9717473a429d76122e46c7a70f
+    type commit
+    tag v0.0.0
+    tagger usrname <usrname@example.com> 1683883065 +0800
+
+    Create a tag
+    gpg: Signature made Fri May 12 17:18:13 2023 CST
+    gpg:                using RSA key 07C700F1B0F8A6BFDA61571CA29FF423FCBD1279
+    gpg:                issuer "usrname@example.com"
+    gpg: Good signature from "usrname <usrname@example.com>" [ultimate]
+    ```

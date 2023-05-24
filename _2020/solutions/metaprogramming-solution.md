@@ -29,6 +29,26 @@ git ls-files -o | xargs rm -f
 ```
 可以列出没有被 git 追踪的文件，一般是构建的中间产物，当然，需要首先设置 git 的忽略规则。
 
+下面展示另一种清理git仓库的思路（将所有untracked文件移动到Untrack目录下）：
+```bash
+~$ cat makefile
+paper.pdf: paper.tex plot-data.png
+  pdflatex paper.tex
+
+plot-%.png: %.dat plot.py
+  ./plot.py -i $*.dat -o $@
+
+.phony: clean
+clean:
+  mkdir -p Untrack
+  rm -f *~ .*~
+  git ls-files -o | grep -v Untrack | xargs -r mv -u -t Untrack
+
+~$ cat .gitignore
+Untrack
+# 设置git忽略该目录，用来放置untracked文件
+```
+
 ### 2. 指定版本要求的方法很多，让我们学习一下 [Rust的构建系统](https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html)的依赖管理。大多数的包管理仓库都支持类似的语法。对于每种语法(尖号、波浪号、通配符、比较、乘积)，构建一种场景使其具有实际意义；
 
 
