@@ -514,6 +514,7 @@ index: 7
      # 正常执行，按下ctrl+C终止stress命令
     ```
     删除cgroup下的节点，需要从叶节点开始（最内层的目录）
+
     ```shell
      # 确保test/cg中的进程全部停止，这里需要退出当前bash session,即关闭终端，然后，重新开启
     ~ $ sudo rmdir /sys/fs/cgroup/test/cg
