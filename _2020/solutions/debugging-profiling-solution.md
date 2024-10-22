@@ -7,7 +7,7 @@ index: 7
 
 
 ## 1. 调试
-1. 使用 Linux 上的 `journalctl` 或 macOS 上的 `log show` 命令来获取最近一天中超级用户的登录信息及其所执行的指令。如果找不到相关信息，您可以执行一些无害的命令，例如`sudo ls` 然后再次查看。
+1. 使用 Linux 上的 `journalctl` 或 macOS 上的 `log show` 命令来获取最近一天中超级用户的登录信息及其所执行的指令。如果找不到相关信息，您可以执行一些无害的命令，例如 `sudo ls` 然后再次查看。
     这里我在树莓派上查询相关日志
     ```bash
     pi@raspberrypi:~$ journalctl | grep sudo
@@ -23,9 +23,9 @@ index: 7
     ```
     log show --last 1h | grep sudo
     ```
-1. 学习 [这份](https://github.com/spiside/pdb-tutorial) `pdb` 实践教程并熟悉相关的命令。更深入的信息您可以参考[这份](https://realpython.com/python-debugging-pdb)教程。
+1. 学习 [这份](https://github.com/spiside/pdb-tutorial) `pdb` 实践教程并熟悉相关的命令。更深入的信息您可以参考 [这份](https://realpython.com/python-debugging-pdb) 教程。
 
-2. 安装 [`shellcheck`](https://www.shellcheck.net/) 并尝试对下面的脚本进行检查。这段代码有什么问题吗？请修复相关问题。在您的编辑器中安装一个linter插件，这样它就可以自动地显示相关警告信息。
+2. 安装 [`shellcheck`](https://www.shellcheck.net/) 并尝试对下面的脚本进行检查。这段代码有什么问题吗？请修复相关问题。在您的编辑器中安装一个 linter 插件，这样它就可以自动地显示相关警告信息。
    ```bash
    #!/bin/sh
    ## Example: a typical script with several problems
@@ -35,21 +35,21 @@ index: 7
        && echo -e 'Playlist $f contains a HQ file in mp3 format'
    done
    ```
-   在 Vim 中可以通过[neomake](https://github.com/neomake/neomake)插件来集成 shellcheck，在`~/.vimrc`中添加` Plug 'neomake/neomake'`
+   在 Vim 中可以通过 [neomake](https://github.com/neomake/neomake) 插件来集成 shellcheck，在 `~/.vimrc` 中添加 ` Plug 'neomake/neomake'`
     ```bash
     call plug#begin()
     Plug 'neomake/neomake'
     call plug#end()
     ```
     ![1.png]({{site.url}}/2020/solutions/images/7/1.png)
-    然后在 vim 执行`:PlugInstall`安装插件
+    然后在 vim 执行 `:PlugInstall` 安装插件
     ![1.png]({{site.url}}/2020/solutions/images/7/2.png)
-    在需要检查的 shell 脚本中，执行`:Neomake` 即可进行 shellcheck 检查。然后光标移动到对应行时可以看到告警或错误。
+    在需要检查的 shell 脚本中，执行 `:Neomake` 即可进行 shellcheck 检查。然后光标移动到对应行时可以看到告警或错误。
     ![1.png]({{site.url}}/2020/solutions/images/7/3.png)
 
 3. (进阶题) 请阅读 [可逆调试](https://undo.io/resources/reverse-debugging-whitepaper/) 并尝试创建一个可以工作的例子（使用 [`rr`](https://rr-project.org/) 或 [`RevPDB`](https://morepypy.blogspot.com/2016/07/reverse-debugging-for-python.html)）。
 
-    此例主要参考了[debug-c-and-c++-programs-with-rr](https://developers.redhat.com/blog/2021/05/03/instant-replay-debugging-c-and-c-programs-with-rr#requirements_and_setup)，使用的代码是[demo.c]({{site.url}}/2020/solutions/demoCode/7/demo.c)
+    此例主要参考了 [debug-c-and-c++-programs-with-rr](https://developers.redhat.com/blog/2021/05/03/instant-replay-debugging-c-and-c-programs-with-rr#requirements_and_setup)，使用的代码是 [demo.c]({{site.url}}/2020/solutions/demoCode/7/demo.c)
     ```shell
     # perf内置在linux-tools中，使用rr需要先安装perf
     ~/debug $ sudo apt install linux-tools-common linux-tools-generic linux-tools-`uname -r`
@@ -75,7 +75,7 @@ index: 7
     # 进入rr-debugger中调试代码
     ~/debug $ sudo rr replay
     ```
-	- 在demo.c中，print_array只是打印出stru.a数组的内容，所以出错的地方应该在打印之前，即可能是multiply函数的调用，在此设置断点。
+	- 在 demo.c 中，print_array 只是打印出 stru.a 数组的内容，所以出错的地方应该在打印之前，即可能是 multiply 函数的调用，在此设置断点。
 
     ```shell
     (rr) b multiply # break简写为b
@@ -86,7 +86,7 @@ index: 7
     Breakpoint 1, multiply (a=0x5568214cb018 <stru> "", size=4, num=0) at demorr.c:16
     16              for (i=0; i<size; i++)
     ```         
-	- 注意到multiply中传入num的值为 0,正常应该是stru.num的初始值 2，使用watch来查看stru.num的值什么时候被改变的。 
+	- 注意到 multiply 中传入 num 的值为 0, 正常应该是 stru.num 的初始值 2，使用 watch 来查看 stru.num 的值什么时候被改变的。 
 
     ```shell
     (rr) watch -l stru.num
@@ -104,7 +104,7 @@ index: 7
     10                      a[size--] = 0;
     (rr) q
     ```
-	- 观察initialize函数中的语句，发现`size--`先返回`size`值，再执行`size=size-1`的操作。而且，由于结构体中变量的内存空间是连续的，所以执行`a[SIZE]=0`时，把`stru.num`的值置为了 0。为此，将`a[size--]=0`修改为`a[--size]=0`，再观察输出结果。
+	- 观察 initialize 函数中的语句，发现 `size--` 先返回 `size` 值，再执行 `size=size-1` 的操作。而且，由于结构体中变量的内存空间是连续的，所以执行 `a[SIZE]=0` 时，把 `stru.num` 的值置为了 0。为此，将 `a[size--]=0` 修改为 `a[--size]=0`，再观察输出结果。
 
     ```shell
     ~/debug $ vim demo.c
@@ -132,7 +132,7 @@ index: 7
         1000    0.031    0.000    0.032    0.000 sorts.py:11(insertionsort)
             1    0.007    0.007    0.385    0.385 sorts.py:1(<module>)
     ```
-    使用 `line_profiler`进行分析，需要安装：
+    使用 `line_profiler` 进行分析，需要安装：
 
     ```bash
     pip install line_profiler
@@ -184,13 +184,13 @@ index: 7
         20     25801      45248.0      1.8      3.4          array[j+1] = v
         21      1000       1503.0      1.5      0.1      return array
     ```
-    插入排序的耗时更高一些。快速排序的瓶颈在于 `left`和 `right`的赋值，而插入排序的瓶颈在`while`循环。  
-    使用 `memory_profiler`进行分析，需要安装：
+    插入排序的耗时更高一些。快速排序的瓶颈在于 `left` 和 `right` 的赋值，而插入排序的瓶颈在 `while` 循环。  
+    使用 `memory_profiler` 进行分析，需要安装：
 
     ```bash
     pip install memory_profiler
     ```
-    同样需要添加`@profile` 装饰器。
+    同样需要添加 `@profile` 装饰器。
     首先分析快速排序的内存使用情况：
 
     ```bash
@@ -258,12 +258,12 @@ index: 7
         49   20.121 MiB    0.000 MiB       16264       return array
     ```
 
-    - 遗憾的是，按照上面的方法使用`memory_profiler`给出的结果无法作为这三种排序算法内存消耗对比的依据（从我自己运行的结果来看，insertionsort的43.301MiB甚至还大于quicksort的43.195MiB，与预期结果相反!!）
-    - 另外，观察三组结果中，函数的每一行的`Increment`（即执行该行所导致的内存占用的增减变化）均为 0！这是由于test_sorted用于测试的list太小了，长度仅为1～50，导致排序算法中每一行创建的变量内存占用也很小。如果直接使用一个长度为2000的list来测试：`l = [random.randint(0,10000) for i in range(0, 2000)]`，会发现quicksort函数的`Left`或`Right`行的`Increment`数据不为 0（创建的list占用内存较大了）。与此同时，用该list测试insertionsort函数时，发现耗用时间较长。
-    - 参考[python-profiling-memory-profiling](https://alexisalulema.com/2022/08/07/python-profiling-memory-profiling-part-3-final/)这篇文章，使用一个长度为 10 000的list测试冒泡排序的内存消耗，需要将近30分钟才输出结果。（使用memory_profiler要权衡时间与效率）
+    - 遗憾的是，按照上面的方法使用 `memory_profiler` 给出的结果无法作为这三种排序算法内存消耗对比的依据（从我自己运行的结果来看，insertionsort 的 43.301MiB 甚至还大于 quicksort 的 43.195MiB，与预期结果相反!!）
+    - 另外，观察三组结果中，函数的每一行的 `Increment`（即执行该行所导致的内存占用的增减变化）均为 0！这是由于 test_sorted 用于测试的 list 太小了，长度仅为 1～50，导致排序算法中每一行创建的变量内存占用也很小。如果直接使用一个长度为 2000 的 list 来测试：`l = [random.randint(0,10000) for i in range(0, 2000)]`，会发现 quicksort 函数的 `Left` 或 `Right` 行的 `Increment` 数据不为 0（创建的 list 占用内存较大了）。与此同时，用该 list 测试 insertionsort 函数时，发现耗用时间较长。
+    - 参考 [python-profiling-memory-profiling](https://alexisalulema.com/2022/08/07/python-profiling-memory-profiling-part-3-final/) 这篇文章，使用一个长度为 10 000 的 list 测试冒泡排序的内存消耗，需要将近 30 分钟才输出结果。（使用 memory_profiler 要权衡时间与效率）
     
-    使用perf检查每个算法的循环次数、缓存命中和丢失：
-    - insertionsort的结果
+    使用 perf 检查每个算法的循环次数、缓存命中和丢失：
+    - insertionsort 的结果
 
     ```shell
     ~/debug $ vim sorts.py
@@ -281,7 +281,7 @@ index: 7
         0.082930000 seconds user
         0.016586000 seconds sys
     ```
-    - quicksort的结果
+    - quicksort 的结果
 
     ```shell
     ~/debug $ vim sorts.py
@@ -299,7 +299,7 @@ index: 7
         0.057863000 seconds user
         0.000000000 seconds sys
     ```
-    - quicksort_inplace的结果
+    - quicksort_inplace 的结果
 
     ```shell
     ~/debug $ vim sorts.py
@@ -336,9 +336,9 @@ index: 7
        #     exec("fib{} = lru_cache(1)(fib{})".format(n, n))
        print(eval("fib9()"))
    ```
-   将代码拷贝到文件中使其变为一个可执行的程序。首先安装 [`pycallgraph`](http://pycallgraph.slowchop.com/en/master/)和[`graphviz`](http://graphviz.org/)(如果您能够执行`dot`, 则说明已经安装了 GraphViz.)。并使用 `pycallgraph graphviz -- ./fib.py` 来执行代码并查看`pycallgraph.png` 这个文件。`fib0` 被调用了多少次？我们可以通过记忆法来对其进行优化。将注释掉的部分放开，然后重新生成图片。这回每个`fibN` 函数被调用了多少次？
+   将代码拷贝到文件中使其变为一个可执行的程序。首先安装 [`pycallgraph`](http://pycallgraph.slowchop.com/en/master/) 和 [`graphviz`](http://graphviz.org/)(如果您能够执行 `dot`, 则说明已经安装了 GraphViz.)。并使用 `pycallgraph graphviz -- ./fib.py` 来执行代码并查看 `pycallgraph.png` 这个文件。`fib0` 被调用了多少次？我们可以通过记忆法来对其进行优化。将注释掉的部分放开，然后重新生成图片。这回每个 `fibN` 函数被调用了多少次？
 
-   setuptools版本过高可能导致pycallgraph安装失败
+   setuptools 版本过高可能导致 pycallgraph 安装失败
    ```bash
    pip install "setuptools<58.0.0"
    pip install pycallgraph
@@ -346,16 +346,16 @@ index: 7
    ![1.png]({{site.url}}/2020/solutions/images/7/4.png)
    放开注释内容后，再次执行：
    ![1.png]({{site.url}}/2020/solutions/images/7/5.png)
-   注意：如果你是 Python 2.7的话，需要修改一下注释的内容:
+   注意：如果你是 Python 2.7 的话，需要修改一下注释的内容:
    ```python
    from backports.functools_lru_cache import lru_cache
    ```
    不过生成的图片里面会包含很多不相关的内容。
 
-2. 我们经常会遇到的情况是某个我们希望去监听的端口已经被其他进程占用了。让我们通过进程的PID查找相应的进程。首先执行 `python -m http.server 4444` 启动一个最简单的 web 服务器来监听 `4444` 端口。在另外一个终端中，执行 `lsof | grep LISTEN` 打印出所有监听端口的进程及相应的端口。找到对应的 PID 然后使用 `kill <PID>` 停止该进程。  
+2. 我们经常会遇到的情况是某个我们希望去监听的端口已经被其他进程占用了。让我们通过进程的 PID 查找相应的进程。首先执行 `python -m http.server 4444` 启动一个最简单的 web 服务器来监听 `4444` 端口。在另外一个终端中，执行 `lsof | grep LISTEN` 打印出所有监听端口的进程及相应的端口。找到对应的 PID 然后使用 `kill <PID>` 停止该进程。  
       ![1.png]({{site.url}}/2020/solutions/images/7/6.png)
 
-3. 限制进程资源也是一个非常有用的技术。执行 `stress -c 3` 并使用`htop` 对 CPU 消耗进行可视化。现在，执行`taskset --cpu-list 0,2 stress -c 3` 并可视化。`stress` 占用了3个 CPU 吗？为什么没有？阅读[`man taskset`](http://man7.org/linux/man-pages/man1/taskset.1.html)来寻找答案。附加题：使用 [`cgroups`](http://man7.org/linux/man-pages/man7/cgroups.7.html)来实现相同的操作，限制`stress -m`的内存使用。  
+3. 限制进程资源也是一个非常有用的技术。执行 `stress -c 3` 并使用 `htop` 对 CPU 消耗进行可视化。现在，执行 `taskset --cpu-list 0,2 stress -c 3` 并可视化。`stress` 占用了 3 个 CPU 吗？为什么没有？阅读 [`man taskset`](http://man7.org/linux/man-pages/man1/taskset.1.html) 来寻找答案。附加题：使用 [`cgroups`](http://man7.org/linux/man-pages/man7/cgroups.7.html) 来实现相同的操作，限制 `stress -m` 的内存使用。  
     首先是设备正常运行状态下的资源占用情况：
     ![1.png]({{site.url}}/2020/solutions/images/7/7.png)
     创建负载：
@@ -368,10 +368,10 @@ index: 7
     taskset --cpu-list 0,2 stress -c 3
     ```
     ![1.png]({{site.url}}/2020/solutions/images/7/9.png)
-    taskset 命令可以将任务绑定到指定CPU核心。  
+    taskset 命令可以将任务绑定到指定 CPU 核心。  
     ![1.png]({{site.url}}/2020/solutions/images/7/10.png)
-    接下来看`cgroups`是如何工作的，我参考了两篇文章：
-    - [Linux资源管理之cgroups简介](https://tech.meituan.com/2015/03/31/cgroups.html)
+    接下来看 `cgroups` 是如何工作的，我参考了两篇文章：
+    - [Linux 资源管理之 cgroups 简介](https://tech.meituan.com/2015/03/31/cgroups.html)
     - [Linux-insidesControl Groups](https://0xax.gitbooks.io/linux-insides/content/Cgroups/linux-cgroups-1.html)    ß
     
     首先我们看一下如何创建内存负载，这里创建 3 个 worker 来不停的申请释放 512M 内存：
@@ -415,12 +415,12 @@ index: 7
     pids /sys/fs/cgroup/pids
     pi@raspberrypi:~$
     ```
-    已经挂载成功，然后创建组并写入规则（内存限制为128M）
+    已经挂载成功，然后创建组并写入规则（内存限制为 128M）
     ```bash
     root@raspberrypi:/home/pi# cgcreate -g memory:cgroup_test_group
     root@raspberrypi:/home/pi# echo 128M > /sys/fs/cgroup/memory/cgroup_test_group/memory.limit_in_bytes
     ```
-    然后在控制组中运行`stress`，创建 3 个 worker 申请 512M 内存：
+    然后在控制组中运行 `stress`，创建 3 个 worker 申请 512M 内存：
     ```bash
     oot@raspberrypi:/home/pi# cgexec -g memory:cgroup_test_group stress -m 3 --vm-bytes 512M
     stress: info: [832] dispatching hogs: 0 cpu, 0 io, 3 vm, 0 hdd
@@ -435,11 +435,11 @@ index: 7
     cgexec -g memory:cgroup_test_group stress -m 3 --vm-bytes 1M
     ```
     ![1.png]({{site.url}}/2020/solutions/images/7/13.png)  
-    下面是使用cgroupV2限制stress命令内存的示例：
+    下面是使用 cgroupV2 限制 stress 命令内存的示例：
 
-    比较新版本的Ubuntu默认安装`cgroup v2`，可以参考[Ubuntu激活cgroupv2](https://cloud-atlas.readthedocs.io/zh_CN/latest/linux/ubuntu_linux/cgroup/enable_cgroup_v2_ubuntu_20.04.html)。下面，将使用cgroupv2实现限制进程内存消耗的操作，更多信息可参考[详解CgroupV2](https://zorrozou.github.io/docs/%E8%AF%A6%E8%A7%A3Cgroup%20V2.html)。
+    比较新版本的 Ubuntu 默认安装 `cgroup v2`，可以参考 [Ubuntu 激活 cgroupv2](https://cloud-atlas.readthedocs.io/zh_CN/latest/linux/ubuntu_linux/cgroup/enable_cgroup_v2_ubuntu_20.04.html)。下面，将使用 cgroupv2 实现限制进程内存消耗的操作，更多信息可参考 [详解 CgroupV2](https://zorrozou.github.io/docs/%E8%AF%A6%E8%A7%A3Cgroup%20V2.html)。
     
-    设置，使用cgroup2
+    设置，使用 cgroup2
     ```shell
     ~ $ grep cgroup /proc/filesystems
     nodev   cgroup
@@ -480,7 +480,7 @@ index: 7
     cgroup.max.depth    cgroup.threads          memory.pressure
      # test节点挂载了memory控制器，所以目录下出现了"memory.*"文件
     ```
-    为test/cg挂载memory控制器，并设置memory的使用大小
+    为 test/cg 挂载 memory 控制器，并设置 memory 的使用大小
     ```shell
     root@laihj:/sys/fs/cgroup# cd test
     root@laihj:/sys/fs/cgroup/test# cat cgroup.subtree_control
@@ -491,7 +491,7 @@ index: 7
     root@laihj:/sys/fs/cgroup/test# echo 0 > memory.swap.max
      # 设置memory的最大使用量为 100M,同时，必须限制内存交换空间的使用
     ```
-    将当前的`bash session pid`写入cg中，接下来在bash中执行的所有命令会受到刚才的memory设置的影响（注意，除了根，进程只能驻留在叶节点（没有子cgroup目录的cgroup目录`echo $$ > test/cgroup.procs`会报错））
+    将当前的 `bash session pid` 写入 cg 中，接下来在 bash 中执行的所有命令会受到刚才的 memory 设置的影响（注意，除了根，进程只能驻留在叶节点（没有子 cgroup 目录的 cgroup 目录 `echo $$ > test/cgroup.procs` 会报错））
     ```shell
     root@laihj:/sys/fs/cgroup/test# echo $$ > cg/cgroup.procs
 
@@ -513,14 +513,14 @@ index: 7
     ^C
      # 正常执行，按下ctrl+C终止stress命令
     ```
-    删除cgroup下的节点，需要从叶节点开始（最内层的目录）
+    删除 cgroup 下的节点，需要从叶节点开始（最内层的目录）
 
     ```shell
      # 确保test/cg中的进程全部停止，这里需要退出当前bash session,即关闭终端，然后，重新开启
     ~ $ sudo rmdir /sys/fs/cgroup/test/cg
     ~ $ sudo rmdir /sys/fs/cgroup/test
     ```
-4. (进阶题) `curl ipinfo.io` 命令或执行 HTTP 请求并获取关于您 IP 的信息。打开 [Wireshark](https://www.wireshark.org/) 并抓取 `curl` 发起的请求和收到的回复报文。（提示：可以使用`http`进行过滤，只显示 HTTP 报文）
-    这里我使用的是`curl www.baidu.com`，请求百度的首页并过滤了除 HTTP 之外的其他报文：
+4. (进阶题) `curl ipinfo.io` 命令或执行 HTTP 请求并获取关于您 IP 的信息。打开 [Wireshark](https://www.wireshark.org/) 并抓取 `curl` 发起的请求和收到的回复报文。（提示：可以使用 `http` 进行过滤，只显示 HTTP 报文）
+    这里我使用的是 `curl www.baidu.com`，请求百度的首页并过滤了除 HTTP 之外的其他报文：
     ![1.png]({{site.url}}/2020/solutions/images/7/14.png)  
     ![1.png]({{site.url}}/2020/solutions/images/7/15.png)  
